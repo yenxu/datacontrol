@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <includeAll path="latest/proc/"/>
+    <includeAll path="latest/view/"/>
+    <includeAll path="latest/pks/"/>
+    <includeAll path="latest/pkb/"/>
+    <includeAll path="latest/trg/" />
+    <include file="latest/journalTables.sql"/>
+    <include file="latest/grantPrivileges.sql"/>
+</databaseChangeLog>

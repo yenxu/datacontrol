@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<include file="db.install.xml"/>
+
+
+    <changeSet id="userErrors" author="Yen">
+      <preConditions onFailMessage="Some packages are invalid! 'Use SQL select * from user_errors' to find the errors.">
+        <sqlCheck expectedResult="0">select count(*) from user_errors where name not like 'BIN%'</sqlCheck>
+      </preConditions>
+    </changeSet>
+</databaseChangeLog>

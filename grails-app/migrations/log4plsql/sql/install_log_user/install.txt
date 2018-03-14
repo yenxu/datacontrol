@@ -1,0 +1,165 @@
+> PROMPT LOG4PLSQL Installation
+LOG4PLSQL Installation
+> PROMPT **********************
+**********************
+> PROMPT 
+
+> set VERIFY OFF
+> PROMPT Create table TLOGLEVEL ...
+Create table TLOGLEVEL ...
+> @@create_table_tloglevel
+table TLOGLEVEL created.
+> PROMPT Insert num_rows into TLOGLEVEL ...
+Insert num_rows into TLOGLEVEL ...
+> @@insert_into_tloglevel
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+committed.
+> PROMPT Create table TLOG ...
+Create table TLOG ...
+> @@create_table_tlog
+table TLOG created.
+table TLOG altered.
+> PROMPT Create sequence SQ_STG ...
+Create sequence SQ_STG ...
+> @@create_sequence_sq_stg
+sequence SQ_STG created.
+> PROMPT Create package PLOGPARAM ...
+Create package PLOGPARAM ...
+> @@ps_plogparam
+PACKAGE PLOGPARAM compiled
+> @@pb_plogparam
+PACKAGE BODY PLOGPARAM compiled
+> PROMPT Create package PLOG_OUT_TLOG ...
+Create package PLOG_OUT_TLOG ...
+> @@ps_plog_out_tlog
+PACKAGE PLOG_OUT_TLOG compiled
+> @@pb_plog_out_tlog
+PACKAGE BODY PLOG_OUT_TLOG compiled
+> -- installation of the optional packages
+> set FEEDBACK OFF
+> PROMPT 
+
+> PROMPT Installation of optional packages
+Installation of optional packages
+> PROMPT *********************************
+*********************************
+> PROMPT Please select the log outputs you want to install (y:yes - n:no) 
+Please select the log outputs you want to install (y:yes - n:no)
+> ACCEPT V_DBMS_OUTPUT CHAR PROMPT 'DBMS_OUTPUT (package PLOG_OUT_DBMS_OUTPUT):'
+> ACCEPT V_ALERT CHAR PROMPT 'Alert file (package PLOG_OUT_ALERT):'
+> ACCEPT V_TRACE CHAR PROMPT 'Trace file (package PLOG_OUT_TRACE):'
+> ACCEPT V_AQ CHAR PROMPT 'Advanced queue (package PLOG_OUT_AQ):'
+> ACCEPT V_SESSION CHAR PROMPT 'Session info in V$SESSION (package PLOG_OUT_SESSION):'
+> VARIABLE output_dbms_output VARCHAR2(50)
+> VARIABLE output_alert VARCHAR2(50)
+> VARIABLE output_trace VARCHAR2(50)
+> VARIABLE output_aq VARCHAR2(50)
+> VARIABLE output_session VARCHAR2(50)
+> DECLARE
+  V_DBMS_OUTPUT2 VARCHAR2(20) := '&V_DBMS_OUTPUT';
+  V_ALERT2 VARCHAR2(20) := '&V_ALERT';  
+  V_TRACE2 VARCHAR2(20) := '&V_TRACE';
+  V_AQ2 VARCHAR2(20) := '&V_AQ';
+  V_SESSION2 VARCHAR2(20) := '&V_SESSION';
+
+BEGIN
+      IF LOWER(V_DBMS_OUTPUT2) = 'y' THEN
+	 :output_dbms_output := 'output_dbms_output';
+      ELSE
+         :output_dbms_output := 'dummy';
+      END IF;
+
+      IF LOWER(V_ALERT2) = 'y' THEN
+	 :output_alert := 'output_alert';
+      ELSE
+         :output_alert := 'dummy';
+      END IF;
+
+      IF LOWER(V_TRACE2) = 'y' THEN
+	 :output_trace := 'output_trace';
+      ELSE
+         :output_trace := 'dummy';
+      END IF;
+
+      IF LOWER(V_AQ2) = 'y' THEN
+	 :output_aq := 'output_aq';
+      ELSE
+         :output_aq := 'dummy';
+      END IF;
+
+      IF LOWER(V_SESSION2) = 'y' THEN
+	 :output_session := 'output_session';
+      ELSE
+         :output_session := 'dummy';
+      END IF;
+
+END;
+> column c_file_output_dbms new_value package_file_output_dbms noprint
+> select :output_dbms_output c_file_output_dbms from dual
+
+
+
+
+> column c_file_output_alert new_value package_file_output_alert noprint
+> select :output_alert c_file_output_alert from dual
+
+
+
+
+> column c_file_output_trace new_value package_file_output_trace noprint
+> select :output_trace c_file_output_trace from dual
+
+
+
+
+> column c_file_output_aq new_value package_file_output_aq noprint
+> select :output_aq c_file_output_aq from dual
+
+
+
+
+> column c_file_output_session new_value package_file_output_session noprint
+> select :output_session c_file_output_session from dual
+
+
+
+
+> set FEEDBACK ON
+> -- call the file to install the feature
+> @@&package_file_output_dbms
+> @@&package_file_output_alert
+> @@&package_file_output_trace
+> @@&package_file_output_aq
+> @@&package_file_output_session
+> PROMPT Create dynamically the package PLOG_INTERFACE ...
+Create dynamically the package PLOG_INTERFACE ...
+> @@ps_plog_interface
+PACKAGE PLOG_INTERFACE compiled
+> @@pb_plog_interface
+anonymous block completed
+> PROMPT Create the main package PLOG ...
+Create the main package PLOG ...
+> @@ps_plog
+PACKAGE PLOG compiled
+> @@pb_plog
+PACKAGE BODY PLOG compiled
+> PROMPT Create the view VLOG
+Create the view VLOG
+> @@create_view_vlog
+view VLOG created.
+> grant select, delete, insert on tlog to public
+grant succeeded.
+> grant select on vlog to public
+grant succeeded.
+> grant select on tloglevel to public
+grant succeeded.
+> GRANT EXECUTE ON PLOGPARAM TO PUBLIC
+GRANT succeeded.
+> GRANT EXECUTE ON PLOG TO PUBLIC
+GRANT succeeded.
